@@ -1,5 +1,12 @@
 # A-Share Multi-Factor Quantitative Research Framework
 
+![Python](https://img.shields.io/badge/Python-3.10-blue)
+![Data](https://img.shields.io/badge/Data-JQData-orange)
+![Framework](https://img.shields.io/badge/Framework-Multi--Factor-green)
+![Market](https://img.shields.io/badge/Market-A--Share-red)
+![License](https://img.shields.io/badge/License-MIT-lightgrey)
+
+
 A Python-based fundamental multi-factor quantitative research framework for the A-share market.
 
 基于 Python 与 JQData 数据接口搭建的 A 股基本面多因子量化研究框架。
@@ -8,8 +15,30 @@ A Python-based fundamental multi-factor quantitative research framework for the 
 
 **Data Acquisition → Data Cleaning → Factor Construction → IC Analysis → Portfolio Construction → Backtesting → Transaction Cost Simulation → Benchmark Comparison**
 
-研究对象为沪深300成分股，通过基本面因子构建多因子选股策略，并验证策略收益、风险及超额表现。
 
+---
+
+## Contents
+
+- [Performance Overview](#1-performance-overview)
+- [Research Background](#2-research-background)
+- [Research Pipeline](#3-research-pipeline)
+- [Data Description](#4-data-description)
+- [Factor Model](#5-factor-model)
+- [Factor Analysis](#6-factor-analysis)
+- [Benchmark Comparison](#7-benchmark-comparison)
+- [Risk Analysis](#8-risk-analysis)
+- [Project Highlights](#project-highlights)
+- [Project Structure](#9-project-structure)
+- [Environment Setup](#10-environment-setup)
+- [Run](#11-run)
+- [Technology Stack](#12-technology-stack)
+- [Limitations](#13-limitations)
+
+
+---
+
+# 1. Performance Overview
 
 ---
 
@@ -370,6 +399,88 @@ The framework automatically completes:
 
 
 ---
+
+# Project Highlights
+
+
+## Complete Quantitative Research Pipeline
+
+
+This project implements an end-to-end quantitative research workflow:
+
+
+- Market data acquisition through JQData
+- Data cleaning and quality checking
+- Fundamental factor construction
+- Factor preprocessing and normalization
+- IC-based factor evaluation
+- Quintile portfolio testing
+- Multi-factor score construction
+- Portfolio backtesting
+- Turnover calculation
+- Transaction cost simulation
+- CSI300 benchmark comparison
+- Performance visualization
+
+
+
+## Modular Framework Design
+
+
+The project adopts a modular architecture:
+
+
+```
+Data Module
+
+    ↓
+
+Factor Module
+
+    ↓
+
+Portfolio Module
+
+    ↓
+
+Backtest Module
+
+    ↓
+
+Analysis Module
+
+    ↓
+
+Visualization Module
+```
+
+
+Each module is independently implemented, making the research process easier to maintain and extend.
+
+
+
+## Research Insights
+
+
+The strategy combines three types of fundamental signals:
+
+
+| Factor | Investment Logic |
+|-|-|
+| PE Ratio | Valuation factor |
+| ROE | Profitability factor |
+| Revenue Growth | Growth factor |
+
+
+The project evaluates factor effectiveness through:
+
+- IC analysis
+- Portfolio group testing
+- Multi-factor portfolio performance
+- Risk-adjusted return analysis
+
+
+Meanwhile, transaction costs and benchmark performance are considered to make the backtest closer to real investment scenarios.
 
 # 13. Limitations
 
