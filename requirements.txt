@@ -1,0 +1,9 @@
+# JQData 数据接口
+jqdatasdk
+# 表格处理和数值计算
+pandas
+numpy
+# 结果图表绘制
+matplotlib
+# 从 .env 文件读取账号配置
+python-dotenv
