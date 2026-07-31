@@ -1,336 +1,355 @@
 # A-Share Multi-Factor Quantitative Research Framework
 
-基于 JQData 数据接口的 A 股基本面多因子量化研究框架。
+基于 **JQData 数据接口** 的 A 股基本面多因子量化研究框架。
 
-本项目完成了一套从**数据获取 → 数据清洗 → 因子构建 → 因子有效性检验 → 组合构建 → 回测分析 → 交易成本模拟 → 基准对比**的完整量化研究流程。
+本项目实现了一套完整的量化研究流程：
 
-项目主要用于研究基本面因子在沪深300成分股中的选股效果，并验证多因子组合在样本期内的收益表现。
+**数据获取 → 数据清洗 → 因子构建 → IC分析 → 单因子测试 → 多因子组合构建 → 回测分析 → 交易成本模拟 → 沪深300基准比较 → 可视化展示**
 
----
+项目以沪深300成分股作为研究股票池，基于企业基本面因子构建多因子选股模型，研究不同因子的预测能力以及组合收益表现。
 
-## 1. 项目背景
-
-在 A 股市场中，基本面因子是量化选股的重要研究方向。
-
-本项目选择沪深300成分股作为研究池，基于企业基本面指标构建多因子模型，通过历史数据回测分析：
-
-- 不同因子的预测能力；
-- 因子组合的收益表现；
-- 策略换手情况；
-- 交易成本影响；
-- 相对于沪深300指数的表现。
 
 ---
 
-# 2. 项目流程
+# 项目背景
 
-整体研究流程如下：
+基本面因子选股是量化投资研究中的经典方法。
+
+本项目希望通过历史数据研究：
+
+- 基本面因子是否具有选股能力；
+- 多因子组合是否能够获得超额收益；
+- 换手率和交易成本对策略表现的影响；
+- 策略相对于市场基准的表现。
+
+
+---
+
+# Research Pipeline
+
 JQData数据获取
-        |
-        ↓
+    ↓
 原始数据检查
-        |
-        ↓
+    ↓
 数据清洗
-        |
-        ↓
+    ↓
 因子构建
-        |
-        ↓
+    ↓
 IC分析
-        |
-        ↓
-单因子五分组测试
-        |
-        ↓
+    ↓
+单因子五分组回测
+    ↓
 多因子组合构建
-        |
-        ↓
+    ↓
 组合回测
-        |
-        ↓
+    ↓
 交易成本模拟
-        |
-        ↓
+    ↓
 沪深300基准比较
-        |
-        ↓
+    ↓
 结果可视化
 
+
 ---
 
-# 3. 数据说明
+# 数据说明
 
 ## 数据来源
 
-- 数据接口：JQData
-- 股票池：沪深300成分股
-- 调仓频率：月度调仓
-- 数据周期：2025-05-30 至 2026-04-29
-
-共：
-
-- 12个调仓节点
-- 300只沪深300股票
-- 约3600条股票-日期记录
-
-
-## 使用因子
-
-项目采用基本面多因子模型：
-
-| 因子 | 含义 |
+| 项目 | 内容 |
 |----|----|
-| PE Ratio | 市盈率估值因子 |
-| ROE | 盈利能力因子 |
-| Revenue Growth | 营收增长因子 |
+| 数据接口 | JQData |
+| 股票池 | 沪深300成分股 |
+| 调仓频率 | 月度调仓 |
+| 数据周期 | 2025-05-30 至 2026-04-29 |
+| 调仓节点 | 12个月 |
+| 股票数量 | 300只 |
+| 数据规模 | 约3600条股票-日期记录 |
 
 
 ---
 
-# 4. 因子处理方法
+# Factor Design
 
-针对原始数据：
+本项目选择三个基本面因子：
 
-## 数据清洗
+| 因子 | 类型 | 含义 |
+|-|-|-|
+| PE Ratio | Value | 估值因子 |
+| ROE | Quality | 盈利能力因子 |
+| Revenue Growth | Growth | 成长因子 |
+
+
+综合因子评分：
+
+Composite Score =
+PE Score
++
+ROE Score
++
+Revenue Growth Score
+
+
+根据综合评分：
+
+1. 股票排序；
+2. 选择高评分股票；
+3. 构建等权组合；
+4. 月度调仓。
+
+
+---
+
+# 数据处理
+
+## 数据清洗流程
 
 包括：
 
-- 缺失值检查
-- 异常值检测
-- PE异常值过滤
-- 去极值处理
-- 标准化处理
+- 缺失值检查；
+- 异常值检测；
+- PE异常值过滤；
+- 去极值处理；
+- 标准化处理。
 
 
-异常值处理采用：
+异常值检测：
 
-- 1% - 99% 分位数检测
-- 后续因子标准化处理
+1% - 99% 分位数
 
 
 ---
 
-# 5. 因子有效性分析
+# 因子有效性分析
 
-## IC分析
 
-通过 Information Coefficient(IC) 衡量因子预测未来收益能力。
+## IC Analysis
+
+使用 Information Coefficient(IC) 衡量因子预测未来收益能力。
+
 
 分析内容：
 
-- IC均值
-- IC稳定性
-- 因子方向有效性
+- IC均值；
+- IC稳定性；
+- 因子方向有效性。
 
 
-## 分组回测
+## 五分组测试
 
-采用五分组方法：
-Low Factor Score
-        |
-        |
-High Factor Score
 
-观察不同因子水平股票组合未来收益差异。
+按照因子评分排序：
+
+Group 1  Low Factor Score
+    ↓
+Group 5  High Factor Score
+
+
+比较不同因子水平股票组合未来收益差异。
 
 
 ---
 
-# 6. 多因子组合构建
+# Multi-Factor Portfolio
 
-将多个基本面因子进行综合：Composite Score=PE Score+ROE Score+Revenue Growth Score
 
-根据综合评分排序：
+组合构建方式：
 
-- 选择高评分股票；
-- 构建等权组合；
+- 多因子综合评分；
+- 股票排序；
+- 高评分股票入选；
+- 等权配置；
 - 月度调仓。
 
 
+回测指标：
+
+- 累计收益；
+- 年化收益；
+- 年化波动率；
+- Sharpe Ratio；
+- 最大回撤；
+- 换手率。
+
+
 ---
 
-# 7. 回测结果
+# Backtest Results
 
-## 原始组合表现
+
+## 未加入交易成本
+
 
 | 指标 | 结果 |
-|----|----|
+|-|-|
 | 回测周期 | 11个月 |
 | 年化收益 | 45.74% |
 | 年化波动率 | 18.77% |
-| Sharpe | 2.12 |
+| Sharpe Ratio | 2.12 |
 | 最大回撤 | -5.89% |
 
 
-## 加入交易成本后
+---
 
-交易成本假设：成本 = 0.1% × 月度换手率
+## 加入交易成本
+
+
+交易成本：
+
+成本 = 0.1% × 月度换手率
 
 
 结果：
 
 | 指标 | 结果 |
-|----|----|
+|-|-|
 | 累计收益 | 40.91% |
 | 年化收益 | 45.38% |
 | 年化波动率 | 18.76% |
-| Sharpe | 2.11 |
+| Sharpe Ratio | 2.11 |
 | 最大回撤 | -5.89% |
 | 平均月换手率 | 21.52% |
 
 
-交易成本前后表现接近，说明策略收益并非完全依赖忽略交易成本。
-
----
-
-# 8. 沪深300基准分析
-
-项目通过 JQData 获取：000300.XSHG
-
-作为市场基准。
+加入交易成本后策略表现变化较小。
 
 
-基准数据处理：
-
-- 获取指数日线收盘价；
-- 匹配策略调仓日期；
-- 生成月度收益序列；
-- 对比策略收益。
+> 注：
+>
+> 当前研究周期较短，结果主要用于验证量化研究流程和模型框架，不代表长期收益能力。
 
 
 ---
 
-# 9. 项目结果展示
-
-## 策略累计收益曲线
-
-将图片放置：outputs/charts/cumulative_return.png
-
-展示：
-
-![累计收益曲线](outputs/charts/cumulative_return.png)
+# Benchmark Comparison
 
 
----
+市场基准：
 
-## 回撤曲线
+沪深300指数
+000300.XSHG
 
-图片：outputs/charts/drawdown.png
 
+基准处理流程：
 
-![最大回撤](outputs/charts/drawdown.png)
+1. JQData获取指数日线数据；
+2. 匹配策略调仓日期；
+3. 转换为月度收益；
+4. 与策略收益比较。
 
 
 ---
 
-## IC分析结果
-
-图片：outputs/charts/ic_analysis.png
+# Visualization
 
 
-![IC分析](outputs/charts/ic_analysis.png)
+## Cumulative Return
+
+![Cumulative Return](outputs/charts/cumulative_return.png)
+
+
+## Drawdown
+
+![Drawdown](outputs/charts/drawdown.png)
+
+
+## IC Analysis
+
+![IC Analysis](outputs/charts/ic_analysis.png)
+
+
+## Group Return
+
+![Group Return](outputs/charts/group_return.png)
+
 
 
 ---
 
-## 分组收益结果
-
-图片：outputs/charts/group_return.png
+# Project Structure
 
 
-![分组收益](outputs/charts/group_return.png)
-
-
----
-
-# 10. 项目结构
 A-Share-MultiFactor-Research
-│
 ├── main.py
-│
-├── run_all.py              # 一键运行流程
-│
-├── data_fetch.py           # JQData数据获取
-│
-├── data_cleaner.py         # 数据清洗
-│
-├── factor_process.py       # 因子处理
-│
-├── ic_analysis.py          # IC分析
-│
-├── backtest_group.py       # 分组回测
-│
-├── multifactor.py          # 多因子组合
-│
-├── backtest_portfolio.py   # 组合回测
-│
-├── turnover_calculator.py  # 换手率计算
-│
-├── benchmark.py            # 沪深300基准
-│
-├── visualization.py        # 可视化
-│
+├── run_all.py
+├── data_fetch.py
+├── data_cleaner.py
+├── factor_process.py
+├── ic_analysis.py
+├── backtest_group.py
+├── multifactor.py
+├── backtest_portfolio.py
+├── turnover_calculator.py
+├── benchmark.py
+├── benchmark_analysis.py
+├── visualization.py
 ├── requirements.txt
-│
 └── README.md
 
+
 ---
 
-# 11. 环境配置
+# Environment
+
 
 Python:
+
 Python 3.10+
 
-安装依赖：
+
+Install:
 
 ```bash
 pip install -r requirements.txt
-配置 JQData：
+JQData配置：
 创建：
 .env
 填写：
 JQDATA_USERNAME=your_username
 
 JQDATA_PASSWORD=your_password
-
-12. 运行方式
-一键运行：
+Run
+运行完整流程：
 python run_all.py
-运行完成后生成：
+生成：
 data/
-    raw/
-    processed/
+
+├── raw/
+
+└── processed/
 
 
 outputs/
-    charts/
-    results/
 
-13. 技术栈
-编程语言
+├── charts/
+
+└── results/
+Technology Stack
+Language
 Python
-数据处理
+Data Processing
 Pandas
 NumPy
-数据接口
+Data Source
 JQData
-回测分析
-自建月频回测框架
-可视化
+Quant Research
+Factor Research
+IC Analysis
+Portfolio Backtesting
+Visualization
 Matplotlib
-
-14. 项目总结
-通过该项目完成了一套完整的量化研究流程：
-熟悉 JQData 数据接口使用；
-掌握基本面因子构建方法；
-完成 IC 分析和分组回测；
-搭建多因子选股模型；
-实现交易成本模拟；
-完成基准收益比较和结果分析。
+Summary
+通过本项目完成了一套完整的A股量化研究框架：
+搭建JQData数据获取流程；
+完成股票数据清洗；
+构建基本面多因子模型；
+实现IC分析和分组测试；
+完成组合回测；
+加入交易成本模拟；
+完成沪深300基准比较；
+输出完整研究报告。
 同时认识到：
-当前研究样本周期较短，回测结果主要用于验证研究流程和模型框架，不代表长期真实收益能力。
-
+由于样本周期限制，目前结果主要用于研究方法验证和流程展示，后续仍需要更长周期、更丰富因子以及更严格样本外测试。
 Author
 马彦龙
 International Economics and Trade
