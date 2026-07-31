@@ -1,4 +1,25 @@
-"""回测多因子最高 20% 等权组合，并计算基础绩效指标。"""
+"""
+Portfolio Backtesting Module
+
+Features:
+- Monthly portfolio return calculation
+- Net value calculation
+- Performance evaluation
+
+Metrics:
+- Annual Return
+- Volatility
+- Sharpe Ratio
+- Maximum Drawdown
+
+Supports:
+- Transaction cost simulation
+
+Author:
+Ma Yanlong
+
+回测多因子最高 20% 等权组合，并计算基础绩效指标。
+"""
 
 # 导入 Path 处理文件路径。
 from pathlib import Path
