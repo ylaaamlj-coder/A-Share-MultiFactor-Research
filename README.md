@@ -1,86 +1,176 @@
 # A-Share Multi-Factor Quantitative Research Framework
 
-基于 **JQData 数据接口** 的 A 股基本面多因子量化研究框架。
+A Python-based quantitative research framework for exploring fundamental factor investing strategies in the Chinese A-share market.
 
-本项目实现了一套完整的量化研究流程：
+This project implements a complete quantitative research pipeline, including:
 
-**数据获取 → 数据清洗 → 因子构建 → IC分析 → 单因子测试 → 多因子组合构建 → 回测分析 → 交易成本模拟 → 沪深300基准比较 → 可视化展示**
+- Data acquisition
+- Data quality inspection
+- Data cleaning
+- Factor construction
+- Factor effectiveness evaluation
+- Portfolio construction
+- Backtesting
+- Transaction cost simulation
+- Benchmark comparison
+- Performance visualization
 
-项目以沪深300成分股作为研究股票池，基于企业基本面因子构建多因子选股模型，研究不同因子的预测能力以及组合收益表现。
-
-
----
-
-# 项目背景
-
-基本面因子选股是量化投资研究中的经典方法。
-
-本项目希望通过历史数据研究：
-
-- 基本面因子是否具有选股能力；
-- 多因子组合是否能够获得超额收益；
-- 换手率和交易成本对策略表现的影响；
-- 策略相对于市场基准的表现。
-
+The research universe is based on CSI 300 constituent stocks. The project aims to evaluate whether fundamental factors can provide effective stock selection signals and examine the performance of a multi-factor portfolio.
 
 ---
 
-# Research Pipeline
+# 1. Research Background
 
-JQData数据获取
-    ↓
-原始数据检查
-    ↓
-数据清洗
-    ↓
-因子构建
-    ↓
-IC分析
-    ↓
-单因子五分组回测
-    ↓
-多因子组合构建
-    ↓
-组合回测
-    ↓
-交易成本模拟
-    ↓
-沪深300基准比较
-    ↓
-结果可视化
+Factor investing is one of the major quantitative investment approaches.
 
+This project focuses on fundamental factors and investigates:
+
+- Whether individual factors have predictive ability for future returns;
+- Whether combining multiple factors improves portfolio performance;
+- How transaction costs affect strategy returns;
+- How the strategy performs compared with the CSI 300 Index.
+
+The project is designed as a complete quantitative research workflow rather than a single backtesting script.
 
 ---
 
-# 数据说明
+# 2. Research Workflow
 
-## 数据来源
-
-| 项目 | 内容 |
-|----|----|
-| 数据接口 | JQData |
-| 股票池 | 沪深300成分股 |
-| 调仓频率 | 月度调仓 |
-| 数据周期 | 2025-05-30 至 2026-04-29 |
-| 调仓节点 | 12个月 |
-| 股票数量 | 300只 |
-| 数据规模 | 约3600条股票-日期记录 |
-
+JQData Market Data
+        |
+        ↓
+Raw Data Collection
+        |
+        ↓
+Data Quality Check
+        |
+        ↓
+Data Cleaning
+        |
+        ↓
+Factor Processing
+        |
+        ↓
+IC Analysis
+        |
+        ↓
+Single Factor Group Backtest
+        |
+        ↓
+Multi-Factor Portfolio Construction
+        |
+        ↓
+Portfolio Backtest
+        |
+        ↓
+Transaction Cost Simulation
+        |
+        ↓
+CSI 300 Benchmark Comparison
+        |
+        ↓
+Visualization
 
 ---
 
-# Factor Design
+# 3. Dataset
 
-本项目选择三个基本面因子：
+## Data Source
 
-| 因子 | 类型 | 含义 |
-|-|-|-|
-| PE Ratio | Value | 估值因子 |
-| ROE | Quality | 盈利能力因子 |
-| Revenue Growth | Growth | 成长因子 |
+- Data provider: JQData
+- Market: China A-share Market
+- Stock Universe: CSI 300 Constituents
+- Rebalancing Frequency: Monthly
+- Research Period:
+
+2025-05-30 to 2026-04-29
+
+## Dataset Scale
+
+- 12 monthly rebalance dates
+- Around 300 stocks per period
+- 3,600 stock-date observations
+
+---
+
+# 4. Factor Construction
+
+The project uses three fundamental factors:
+
+| Factor | Description |
+|--------|-------------|
+| PE Ratio | Valuation factor |
+| ROE | Profitability factor |
+| Revenue Growth | Growth factor |
 
 
-综合因子评分：
+The factors represent three common dimensions of fundamental investing:
+
+- Valuation
+- Quality
+- Growth
+
+---
+
+# 5. Factor Processing
+
+Before analysis, raw data goes through several preprocessing steps:
+
+## Data Cleaning
+
+Including:
+
+- Missing value inspection
+- Duplicate record checking
+- Invalid value filtering
+- Extreme value detection
+
+
+## Outlier Treatment
+
+Extreme values are identified using:
+
+1% - 99% percentile method
+
+After processing:
+
+- Factors are cleaned;
+- Extreme observations are controlled;
+- Data is prepared for standardized scoring.
+
+---
+
+# 6. Factor Effectiveness Evaluation
+
+## Information Coefficient (IC) Analysis
+
+IC is used to evaluate the relationship between factor scores and future stock returns.
+
+The analysis includes:
+
+- Average IC
+- IC stability
+- Factor predictive direction
+
+
+## Quintile Portfolio Analysis
+
+Stocks are sorted according to factor scores and divided into five groups.
+
+Example:
+
+Low Factor Score
+        |
+        |
+High Factor Score
+
+The return difference between groups is analyzed to evaluate factor effectiveness.
+
+---
+
+# 7. Multi-Factor Portfolio Construction
+
+A composite factor score is constructed:
 
 Composite Score =
 PE Score
@@ -89,268 +179,193 @@ ROE Score
 +
 Revenue Growth Score
 
+Portfolio construction process:
 
-根据综合评分：
-
-1. 股票排序；
-2. 选择高评分股票；
-3. 构建等权组合；
-4. 月度调仓。
-
-
----
-
-# 数据处理
-
-## 数据清洗流程
-
-包括：
-
-- 缺失值检查；
-- 异常值检测；
-- PE异常值过滤；
-- 去极值处理；
-- 标准化处理。
-
-
-异常值检测：
-
-1% - 99% 分位数
-
+1. Calculate standardized factor scores;
+2. Rank stocks by composite score;
+3. Select high-score stocks;
+4. Construct an equally weighted portfolio;
+5. Rebalance monthly.
 
 ---
 
-# 因子有效性分析
+# 8. Backtest Results
 
+## Portfolio Performance Before Transaction Costs
 
-## IC Analysis
-
-使用 Information Coefficient(IC) 衡量因子预测未来收益能力。
-
-
-分析内容：
-
-- IC均值；
-- IC稳定性；
-- 因子方向有效性。
-
-
-## 五分组测试
-
-
-按照因子评分排序：
-
-Group 1  Low Factor Score
-    ↓
-Group 5  High Factor Score
-
-
-比较不同因子水平股票组合未来收益差异。
-
-
----
-
-# Multi-Factor Portfolio
-
-
-组合构建方式：
-
-- 多因子综合评分；
-- 股票排序；
-- 高评分股票入选；
-- 等权配置；
-- 月度调仓。
-
-
-回测指标：
-
-- 累计收益；
-- 年化收益；
-- 年化波动率；
-- Sharpe Ratio；
-- 最大回撤；
-- 换手率。
-
-
----
-
-# Backtest Results
-
-
-## 未加入交易成本
-
-
-| 指标 | 结果 |
-|-|-|
-| 回测周期 | 11个月 |
-| 年化收益 | 45.74% |
-| 年化波动率 | 18.77% |
+| Metric | Result |
+|---|---:|
+| Backtest Period | 11 months |
+| Annual Return | 45.74% |
+| Annual Volatility | 18.77% |
 | Sharpe Ratio | 2.12 |
-| 最大回撤 | -5.89% |
+| Maximum Drawdown | -5.89% |
 
 
----
+## Portfolio Performance After Transaction Costs
 
-## 加入交易成本
+Transaction cost assumption:
 
+Cost = 0.1% × Monthly Turnover
 
-交易成本：
+Results:
 
-成本 = 0.1% × 月度换手率
-
-
-结果：
-
-| 指标 | 结果 |
-|-|-|
-| 累计收益 | 40.91% |
-| 年化收益 | 45.38% |
-| 年化波动率 | 18.76% |
+| Metric | Result |
+|---|---:|
+| Cumulative Return | 40.91% |
+| Annual Return | 45.38% |
+| Annual Volatility | 18.76% |
 | Sharpe Ratio | 2.11 |
-| 最大回撤 | -5.89% |
-| 平均月换手率 | 21.52% |
+| Maximum Drawdown | -5.89% |
+| Average Monthly Turnover | 21.52% |
 
 
-加入交易成本后策略表现变化较小。
-
-
-> 注：
->
-> 当前研究周期较短，结果主要用于验证量化研究流程和模型框架，不代表长期收益能力。
-
+The strategy performance remains relatively stable after considering transaction costs.
 
 ---
 
-# Benchmark Comparison
+# 9. Benchmark Comparison
 
+The CSI 300 Index is used as the benchmark:
 
-市场基准：
-
-沪深300指数
+Index Code:
 000300.XSHG
 
+Benchmark processing:
 
-基准处理流程：
-
-1. JQData获取指数日线数据；
-2. 匹配策略调仓日期；
-3. 转换为月度收益；
-4. 与策略收益比较。
-
+- Download CSI 300 daily closing prices through JQData;
+- Match portfolio rebalance dates;
+- Generate monthly benchmark returns;
+- Compare portfolio performance against market performance.
 
 ---
 
-# Visualization
+# 10. Visualization
+
+The project generates several research charts:
+
+## Cumulative Return Curve
+
+outputs/charts/cumulative_return.png
+
+Shows:
+
+- Portfolio growth trend
+- Benchmark comparison
 
 
-## Cumulative Return
+## Drawdown Analysis
 
-![Cumulative Return](outputs/charts/cumulative_return.png)
+outputs/charts/drawdown.png
 
+Shows:
 
-## Drawdown
-
-![Drawdown](outputs/charts/drawdown.png)
+- Maximum drawdown
+- Risk characteristics
 
 
 ## IC Analysis
 
-![IC Analysis](outputs/charts/ic_analysis.png)
+outputs/charts/ic_analysis.png
+
+Shows:
+
+- Factor predictive ability
 
 
-## Group Return
+## Group Return Analysis
 
-![Group Return](outputs/charts/group_return.png)
+outputs/charts/group_return.png
 
+Shows:
 
+- Return differences among factor groups
 
 ---
 
-# Project Structure
-
+# 11. Project Structure
 
 A-Share-MultiFactor-Research
+│
 ├── main.py
-├── run_all.py
-├── data_fetch.py
-├── data_cleaner.py
-├── factor_process.py
-├── ic_analysis.py
-├── backtest_group.py
-├── multifactor.py
-├── backtest_portfolio.py
-├── turnover_calculator.py
-├── benchmark.py
-├── benchmark_analysis.py
-├── visualization.py
+├── run_all.py                 # Complete research pipeline
+│
+├── data_fetch.py              # JQData data acquisition
+├── data_check.py              # Data quality inspection
+├── data_cleaner.py            # Data cleaning
+│
+├── factor_process.py          # Factor construction and processing
+├── ic_analysis.py             # IC evaluation
+├── backtest_group.py          # Quintile portfolio backtest
+│
+├── multifactor.py             # Multi-factor model
+├── backtest_portfolio.py      # Portfolio backtest
+├── turnover_calculator.py     # Turnover calculation
+│
+├── benchmark.py               # CSI 300 benchmark data
+├── benchmark_analysis.py      # Benchmark comparison
+│
+├── visualization.py           # Research visualization
+│
 ├── requirements.txt
 └── README.md
 
-
 ---
 
-# Environment
+# 12. Environment Setup
 
+## Requirements
 
 Python:
 
 Python 3.10+
 
 
-Install:
+Install dependencies:
 
 ```bash
 pip install -r requirements.txt
-JQData配置：
-创建：
+JQData Configuration
+Create:
 .env
-填写：
+Add:
 JQDATA_USERNAME=your_username
 
 JQDATA_PASSWORD=your_password
-Run
-运行完整流程：
+13. Running the Project
+Run the complete pipeline:
 python run_all.py
-生成：
+After completion:
 data/
-
 ├── raw/
-
 └── processed/
 
 
 outputs/
-
-├── charts/
-
-└── results/
-Technology Stack
-Language
+└── charts/
+will be generated.
+14. Technology Stack
+Programming Language
 Python
 Data Processing
 Pandas
 NumPy
 Data Source
 JQData
-Quant Research
-Factor Research
-IC Analysis
-Portfolio Backtesting
+Quantitative Research
+Factor analysis
+IC evaluation
+Portfolio backtesting
+Transaction cost simulation
 Visualization
 Matplotlib
-Summary
-通过本项目完成了一套完整的A股量化研究框架：
-搭建JQData数据获取流程；
-完成股票数据清洗；
-构建基本面多因子模型；
-实现IC分析和分组测试；
-完成组合回测；
-加入交易成本模拟；
-完成沪深300基准比较；
-输出完整研究报告。
-同时认识到：
-由于样本周期限制，目前结果主要用于研究方法验证和流程展示，后续仍需要更长周期、更丰富因子以及更严格样本外测试。
+15. Project Limitations
+Although the framework completes the full quantitative research process, several limitations remain:
+The current sample period is relatively short;
+Backtest results are for research validation only;
+Longer historical periods are required for robustness testing;
+Additional factors and risk controls can be introduced in future improvements.
 Author
-马彦龙
+Ma Yanlong
 International Economics and Trade
 Python Quantitative Research / Data Analysis
