@@ -1,4 +1,24 @@
-"""从 JQData 原始下载开始，一键运行 A 股基本面多因子研究流程。"""
+"""
+A-Share Multi-Factor Quantitative Research Framework
+
+Main research pipeline.
+
+Workflow:
+1. Data acquisition
+2. Data cleaning
+3. Factor construction
+4. IC analysis
+5. Portfolio construction
+6. Backtesting
+7. Transaction cost simulation
+8. Benchmark comparison
+9. Visualization
+
+Author:
+Ma Yanlong
+
+从 JQData 原始下载开始，一键运行 A 股基本面多因子研究流程。
+"""
 
 # 导入 os，用于将工作目录固定为项目目录。
 import os
