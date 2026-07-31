@@ -1,4 +1,26 @@
-"""构造 EP、ROE、营收增长率因子，并按月进行去极值和标准化。"""
+"""
+Factor Processing Module
+
+Functions:
+- Fundamental factor cleaning
+- Outlier treatment
+- Factor normalization
+- Factor score calculation
+
+Factors:
+- PE Ratio
+- ROE
+- Revenue Growth
+
+Processing:
+1% - 99% quantile based winsorization
+and standardization.
+
+Author:
+Ma Yanlong
+
+构造 EP、ROE、营收增长率因子，并按月进行去极值和标准化。
+"""
 
 # 导入 Path 处理文件路径。
 from pathlib import Path
