@@ -1,4 +1,19 @@
-"""Windows + PyCharm 环境下一键运行完整研究流程。"""
+"""
+One-click Execution Script
+
+Automatically runs the complete
+quantitative research pipeline.
+
+Pipeline:
+Data -> Factors -> Portfolio -> Backtest -> Benchmark -> Visualization
+
+Usage:
+
+python run_all.py
+
+Author:
+Ma Yanlong
+"""
 
 # 导入 os，用于向子程序传递 JQData 环境变量。
 import os
