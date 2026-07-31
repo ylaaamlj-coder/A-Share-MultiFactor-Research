@@ -1,4 +1,29 @@
-"""构造 EP、ROE、营收增长率等权合成的多因子选股信号。"""
+"""
+Multi-Factor Portfolio Construction Module
+
+Purpose:
+Construct stock ranking score based on
+multiple fundamental factors.
+
+Method:
+Composite Score =
+PE Score
++
+ROE Score
++
+Revenue Growth Score
+
+Portfolio:
+- Rank stocks by score
+- Select high-score stocks
+- Equal-weight allocation
+- Monthly rebalance
+
+Author:
+Ma Yanlong
+
+构造 EP、ROE、营收增长率等权合成的多因子选股信号。
+"""
 
 # 导入 Path 处理文件路径。
 from pathlib import Path
